@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  order-service:
+    build:
+      context: .
+      dockerfile: OrderService/Dockerfile
+    container_name: order-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=ShopDatabase;User=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;Trusted_Connection=True;Encrypt=False;
+      - RabbitMq__HostName=rabbitmq
+    ports:
+      - "7265:80"
+    networks:
+      - app-network
+    depends_on:
+      - db
+      - rabbitmq
+
+  user-service:
+    build:
+      context: .
+      dockerfile: UserService/Dockerfile
+    container_name: user-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=ShopDatabase;User=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;Trusted_Connection=True;Encrypt=False;;
+      - RabbitMq__HostName=rabbitmq
+    ports:
+      - "7084:80"
+    networks:
+      - app-network
+    depends_on:
+      - db
+      - rabbitmq
+
+  item-service:
+    build:
+      context: .
+      dockerfile: ItemService/Dockerfile
+    container_name: item-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=ShopDatabase;User=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;Trusted_Connection=True;Encrypt=False;
+      - RabbitMq__HostName=rabbitmq
+    ports:
+      - "7184:80"
+    networks:
+      - app-network
+    depends_on:
+      - db
+      - rabbitmq
+
+  gateway:
+    build:
+      context: .
+      dockerfile: ShopManager/Dockerfile
+    container_name: ocelot-gateway
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://*:5000
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    depends_on:
+      - order-service
+      - user-service
+      - item-service
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: db
+    environment:
+      SA_PASSWORD: "YourStrong@Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - app-network
+    volumes:
+      - ./init-db:/init-db
+    command: >
+      /bin/bash -c "
+        /opt/mssql/bin/sqlservr &
+        sleep 20;
+        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P YourStrong@Passw0rd -d master -i /init-db/create-db.sql;
+        wait
+      "
+
+  redis:
+    image: "redis:latest"
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:

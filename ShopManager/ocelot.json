@@ -1,0 +1,219 @@
+﻿{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/users/api/swagger/v1/swagger.json",
+      "DownstreamPathTemplate": "/swagger/v1/swagger.json",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7084
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 10,
+        "Limit": 5
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/users/{everything}",
+      "DownstreamPathTemplate": "/api/users/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7084
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 10,
+        "Limit": 5
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/auth/{everything}",
+      "DownstreamPathTemplate": "/api/auth/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7084
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 10,
+        "Limit": 5
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/roles/{everything}",
+      "DownstreamPathTemplate": "/api/roles/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7084
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 10,
+        "Limit": 5
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/orders/api/swagger/v1/swagger.json",
+      "DownstreamPathTemplate": "/swagger/v1/swagger.json",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7265
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 10,
+        "Limit": 5
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/orders/{everything}",
+      "DownstreamPathTemplate": "/api/orders/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7265
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 10,
+        "Limit": 5
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/items/api/swagger/v1/swagger.json",
+      "DownstreamPathTemplate": "/swagger/v1/swagger.json",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7184
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 10,
+        "Limit": 5
+      }
+    },
+    {
+      "UpstreamPathTemplate": "/api/items/{everything}",
+      "DownstreamPathTemplate": "/api/items/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7184
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 10,
+        "Limit": 5
+      }
+    },
+    {
+      "Key": "user",
+      "UpstreamPathTemplate": "/api/users/",
+      "DownstreamPathTemplate": "/api/users/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7084
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      },
+      "RateLimitOptions": {
+        "ClientWhitelist": [],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 10,
+        "Limit": 5
+      }
+    },
+    {
+      "Key": "orders",
+      "UpstreamPathTemplate": "/api/idorders/",
+      "DownstreamPathTemplate": "/api/orders/user",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7084
+        }
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 60
+      }
+    }
+  ],
+  "AggregateRoutes": [
+    {
+      "UpstreamPathTemplate": "/api/aggregate/user-orders",
+      "RouteKeys": [ "user", "orders" ],
+      "Aggregator": "UserOrdersAggregator"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5000/"
+  }
+}
